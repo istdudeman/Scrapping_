@@ -3,14 +3,12 @@ import pandas as pd
 from time import sleep
 from datetime import datetime
 
-# ✅ Reddit API setup
 reddit = praw.Reddit(
     client_id="iJEaWwY_AHHvzzQ9sGXFnQ",
     client_secret="FZNtJVhs04KlWw_tbLsSyiDdM5HvuA",
     user_agent="tuntutan178-sentiment/0.3 by el_manu"
 )
 
-# ✅ List of Indonesian-focused subreddits
 subreddits = [
     "Indonesia", "indonesia", "Indo", "anakindonesia",
     "IndonesiaPolitics", "IDnews", "indonesia_reddit",
@@ -18,7 +16,6 @@ subreddits = [
     "kopireddit", "memeIndonesia", "IndoDankMemes"
 ]
 
-# ✅ List of search queries
 queries = [
     "tuntutan 17+8",
     "tuntutan 17 + 8",
@@ -34,9 +31,8 @@ queries = [
 ]
 
 posts = []
-seen_ids = set()  # Avoid duplicates globally
+seen_ids = set()  
 
-# ✅ Start crawling
 for subreddit in subreddits:
     for query in queries:
         print(f"🔍 Searching '{query}' in r/{subreddit}")
@@ -54,12 +50,11 @@ for subreddit in subreddits:
                         "url": submission.url
                     })
                     seen_ids.add(submission.id)
-            sleep(2)  # Respect API rate limits
+            sleep(2) 
         except Exception as e:
             print(f"⚠️ Error on r/{subreddit} ({query}): {e}")
             sleep(5)
 
-# ✅ Wrap up
 df = pd.DataFrame(posts)
 df.drop_duplicates(subset=["id"], inplace=True)
 df.to_csv("reddit_tuntutan178_indonesia.csv", index=False, encoding="utf-8-sig")
